@@ -1,0 +1,87 @@
+unit unt_show_exist_entegal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, DB, StdCtrls;
+
+type
+  Tfrm_show_exist_entegal = class(TForm)
+    DBGrid2: TDBGrid;
+    DataSource1: TDataSource;
+    btn_hazf: TButton;
+    L_code_reshteie_feli: TLabel;
+    procedure btn_hazfClick(Sender: TObject);
+    procedure delet_entegal;
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frm_show_exist_entegal: Tfrm_show_exist_entegal;
+
+implementation
+
+uses unt_dm, unt_show_exist_entegal2, unt_Dm_eslah;
+
+{$R *.dfm}
+procedure Tfrm_show_exist_entegal.delet_entegal;
+begin
+    Dm.ADOQ_komakie_hazf.SQL.Text:='update t_sahamdaran set tedade_sahme_ashari=tedade_sahme_ashari+'+Dm.ADOQ_show_afradtedade_sahme_ashari_avalie.AsString+
+    ' where id='+Dm.ADOQ_show_afradentegal_az_id.AsString;
+    Dm.ADOQ_komakie_hazf.ExecSQL;
+
+    Dm.ADOQ_komakie_hazf.SQL.Text:='delete from t_sahamdaran where id='+Dm.ADOQ_show_afradid.AsString;
+    Dm.ADOQ_komakie_hazf.ExecSQL;
+
+    sleep(2000);
+
+    Dm.ADOQ_show_nafarat_baraye_dadane_sahm.SQL.Text:='select tarikh,sahm_zaribe_kasr,sahm_sorate_kasr,sahm_makhraje_kasr,family,name,tedade_sahme_ashari,'+
+    'cod_reshteei,name_pedar,nafare_aval,tedade_sahme_ashari_avalie,cod_shakhs,id,sh_parvande,noe_entegal,entegal_az_id,somn,entegale_somn,(tedade_sahme_ashari-somn) as max_entegal,kharid_somn from t_sahamdaran'+
+    ' where nafare_aval='+QuotedStr('äİÑÇæá')+
+    ' order by family,name,name_pedar';
+    Dm.ADOQ_show_nafarat_baraye_dadane_sahm.Open;
+
+    Dm_eslah.ADOQ_show_entegalha.sql.Text:='select * from t_sahamdaran where az_family<>'+QuotedStr('')+
+    ' order by family,name,name_pedar';
+    Dm_eslah.ADOQ_show_entegalha.Open;
+
+    MessageBox(Handle,pchar('ÇäÊŞÇá Óåã ÂÈ ÍĞİ ÑÏíÏ'),'ÊæÌå !',MB_OK or MB_RIGHT or MB_RTLREADING or MB_ICONINFORMATION);
+   close;
+    
+end;
+
+
+procedure Tfrm_show_exist_entegal.btn_hazfClick(
+  Sender: TObject);
+begin
+    Dm.ADOQ_komakie_hazf.SQL.Text:='select  tarikh,family,name,tedade_sahme_ashari,noe_entegal,name_pedar,tedade_sahme_ashari_avalie'+
+    ',sh_parvande,somn,entegale_somn,(tedade_sahme_ashari-somn) as max_entegal,kharid_somn from t_sahamdaran where cod_reshteei like '+
+    QuotedStr(L_code_reshteie_feli.Caption+'_____')+' and cod_reshteei<>'+QuotedStr(L_code_reshteie_feli.Caption)+
+    '  order by id';
+    Dm.ADOQ_komakie_hazf.Open;
+
+    if Dm.ADOQ_komakie_hazf.RecordCount > 0 then
+    begin
+      MessageBox(Handle,pchar('Èå Ïáíá ÇäÊŞÇá Óåã ÂÈ ÇÒ Ñ˜æÑÏ İÚáí äãí ÊæÇäíÏ Çíä Ñ˜æÑÏ ÑÇ ÍĞİ äãÇííÏ'),'ÎØÇ !',MB_OK or MB_RIGHT or MB_RTLREADING or MB_ICONEXCLAMATION);
+      frm_show_exist_entegal2.ShowModal;
+    end
+    else
+    begin
+        if MessageBox(Handle,pchar('ÍĞİ ÇäÊŞÇá ÊÚÏÇÏ Óåã ÂÈ ÑÇ ÊÇííÏ ãí äãÇííÏ¿(ÈÇ ÍĞİ ÇäÊŞÇá ¡ ÊÚÏÇÏ Óåã ÇäÊŞÇá íÇİÊå Èå ÊÚÏÇÏ Óåã İÚáí ÇäÊŞÇá ÏåäÏå ÇÖÇİå ãí ÑÏÏ)'),'ÊÇííÏ ÍĞİ !',MB_YESNO or MB_RIGHT or MB_RTLREADING or MB_ICONQUESTION)=id_yes then
+        begin
+           delet_entegal;
+        end
+        else
+         Close;
+
+    end;
+end;
+
+
+
+end.

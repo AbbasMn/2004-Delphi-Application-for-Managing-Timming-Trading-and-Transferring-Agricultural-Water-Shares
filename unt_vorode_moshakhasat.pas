@@ -1,0 +1,155 @@
+unit unt_vorode_moshakhasat;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, SUIEdit, DB, Grids, DBGrids;
+
+type
+  Tfrm_vorode_moshakhasat = class(TForm)
+    G_mojod: TGroupBox;
+    DBGrid2: TDBGrid;
+    DataSource1: TDataSource;
+    Label6: TLabel;
+    e_search: TsuiEdit;
+    L_noe_nafar: TLabel;
+    Button11111: TButton;
+    Button13232: TButton;
+    Button1: TButton;
+    procedure FormShow(Sender: TObject);
+
+    procedure shpw_afrade_mojod;
+    procedure e_searchChange(Sender: TObject);
+    procedure Button11111Click(Sender: TObject);
+    procedure Button13232Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+var
+  frm_vorode_moshakhasat: Tfrm_vorode_moshakhasat;
+
+implementation
+
+uses unt_dm, unt_show_afrade_mojod, unt_data_input,
+  unt_vorode_dovom_be_bad, unt_shakhse_jadid, unt_entegale_koli_moaian,
+  unt_entegale_koli_na_moaian, unt_eslahe_shakhs, unt_sabte_somne_zan;
+
+{$R *.dfm}
+procedure Tfrm_vorode_moshakhasat.shpw_afrade_mojod;
+begin
+
+  dm.ADOQ_show_afrade_mojod.SQL.Text:='select * from T_afrade_mojod order by family,name,name_pedar,sh_sh';
+  dm.ADOQ_show_afrade_mojod.Open;
+end;
+
+
+
+
+
+
+
+
+
+
+
+procedure Tfrm_vorode_moshakhasat.FormShow(Sender: TObject);
+begin
+  shpw_afrade_mojod;
+end;
+
+procedure Tfrm_vorode_moshakhasat.e_searchChange(Sender: TObject);
+begin
+ dm.ADOQ_show_afrade_mojod.Locate('family',e_search.Text,[loPartialKey]);
+end;
+
+procedure Tfrm_vorode_moshakhasat.Button11111Click(Sender: TObject);
+begin
+        if L_noe_nafar.Caption='aval' then
+        begin
+           frm_data_input.l_name.Caption:=Dm.ADOQ_show_afrade_mojodname.AsString;
+           frm_data_input.l_family.Caption:=Dm.ADOQ_show_afrade_mojodfamily.AsString;
+           frm_data_input.l_pedar.Caption:=Dm.ADOQ_show_afrade_mojodname_pedar.AsString;
+           frm_data_input.l_sh_sh.Caption:=Dm.ADOQ_show_afrade_mojodsh_sh.AsString;
+           frm_data_input.cod_shakhs:=Dm.ADOQ_show_afrade_mojodcod.AsString;
+           frm_data_input.cod_reshte:=Dm.ADOQ_show_afrade_mojodcod_reshte.AsString;
+           frm_data_input.ShowModal;
+        end;
+        if L_noe_nafar.Caption='not aval' then
+        begin
+           frm_vorode_dovom_be_bad.l_name.Caption:=Dm.ADOQ_show_afrade_mojodname.AsString;
+           frm_vorode_dovom_be_bad.l_family.Caption:=Dm.ADOQ_show_afrade_mojodfamily.AsString;
+           frm_vorode_dovom_be_bad.l_pedar.Caption:=Dm.ADOQ_show_afrade_mojodname_pedar.AsString;
+           frm_vorode_dovom_be_bad.l_sh_sh.Caption:=Dm.ADOQ_show_afrade_mojodsh_sh.AsString;
+           frm_vorode_dovom_be_bad.cod_shakhs:=Dm.ADOQ_show_afrade_mojodcod.AsString;
+           frm_vorode_dovom_be_bad.cod_reshte:=Dm.ADOQ_show_afrade_mojodcod_reshte.AsString;
+           frm_vorode_dovom_be_bad.ShowModal;
+        end;                                      
+
+        if L_noe_nafar.Caption='koli moayan' then
+        begin
+          dm.ADOQ_show_afrade_mojod.SQL.Text:='select * from T_afrade_mojod where cod='+Dm.ADOQ_show_afrade_mojodcod.AsString;
+          dm.ADOQ_show_afrade_mojod.Open;
+
+          frm_entegale_koli_moaian.id_koli_moaian_be:=dm.ADOQ_show_afrade_mojodid_koli_moaian_be.AsString;
+
+           frm_entegale_koli_moaian.l_name.Caption:=Dm.ADOQ_show_afrade_mojodname.AsString;
+           frm_entegale_koli_moaian.l_family.Caption:=Dm.ADOQ_show_afrade_mojodfamily.AsString;
+           frm_entegale_koli_moaian.l_pedar.Caption:=Dm.ADOQ_show_afrade_mojodname_pedar.AsString;
+           frm_entegale_koli_moaian.l_sh_sh.Caption:=Dm.ADOQ_show_afrade_mojodsh_sh.AsString;
+           frm_entegale_koli_moaian.code_girande:=Dm.ADOQ_show_afrade_mojodcod.AsString;
+           frm_entegale_koli_moaian.code_reshteie_girande:=Dm.ADOQ_show_afrade_mojodcod_reshte.AsString;
+           Close;
+        end;
+
+        if L_noe_nafar.Caption='koli na moayan' then
+        begin
+            dm.ADOQ_show_afrade_mojod.SQL.Text:='select * from T_afrade_mojod where cod='+Dm.ADOQ_show_afrade_mojodcod.AsString;
+            dm.ADOQ_show_afrade_mojod.Open;
+
+           frm_entegale_koli_na_moaian.id_koli_na_moaian_be:=dm.ADOQ_show_afrade_mojodid_koli_na_moaian_be.AsString;
+
+           frm_entegale_koli_na_moaian.l_name.Caption:=Dm.ADOQ_show_afrade_mojodname.AsString;
+           frm_entegale_koli_na_moaian.l_family.Caption:=Dm.ADOQ_show_afrade_mojodfamily.AsString;
+           frm_entegale_koli_na_moaian.l_pedar.Caption:=Dm.ADOQ_show_afrade_mojodname_pedar.AsString;
+           frm_entegale_koli_na_moaian.l_sh_sh.Caption:=Dm.ADOQ_show_afrade_mojodsh_sh.AsString;
+           frm_entegale_koli_na_moaian.code_girande:=Dm.ADOQ_show_afrade_mojodcod.AsString;
+           frm_entegale_koli_na_moaian.code_reshteie_girande:=Dm.ADOQ_show_afrade_mojodcod_reshte.AsString;
+           Close;
+        end;
+
+        if L_noe_nafar.Caption='somn' then
+        begin
+          dm.ADOQ_show_afrade_mojod.SQL.Text:='select * from T_afrade_mojod where cod='+Dm.ADOQ_show_afrade_mojodcod.AsString;
+          dm.ADOQ_show_afrade_mojod.Open;
+
+           frm_sabte_somne_zan.l_name.Caption:=Dm.ADOQ_show_afrade_mojodname.AsString;
+           frm_sabte_somne_zan.l_family.Caption:=Dm.ADOQ_show_afrade_mojodfamily.AsString;
+           frm_sabte_somne_zan.l_pedar.Caption:=Dm.ADOQ_show_afrade_mojodname_pedar.AsString;
+           frm_sabte_somne_zan.l_sh_sh.Caption:=Dm.ADOQ_show_afrade_mojodsh_sh.AsString;
+           frm_sabte_somne_zan.cod_shakhs:=Dm.ADOQ_show_afrade_mojodcod.AsString;
+           frm_sabte_somne_zan.cod_reshte:=Dm.ADOQ_show_afrade_mojodcod_reshte.AsString;
+
+           frm_sabte_somne_zan.ShowModal;
+           Close;
+        end;
+
+end;
+
+procedure Tfrm_vorode_moshakhasat.Button13232Click(Sender: TObject);
+begin
+  frm_shakhse_jadid.ShowModal;
+end;
+
+procedure Tfrm_vorode_moshakhasat.Button1Click(Sender: TObject);
+begin
+if Dm.ADOQ_show_afrade_mojod.RecordCount>0 then
+  frm_eslahe_shakhs.ShowModal;
+end;
+
+end.

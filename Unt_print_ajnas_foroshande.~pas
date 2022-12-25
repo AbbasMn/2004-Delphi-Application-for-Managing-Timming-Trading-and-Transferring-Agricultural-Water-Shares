@@ -1,0 +1,99 @@
+unit Unt_print_ajnas_foroshande;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls;
+
+type
+  TFrm_print_ajnas_foroshande = class(TForm)
+    QuickRep1: TQuickRep;
+    TitleBand1: TQRBand;
+    QRLabel15: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRShape18: TQRShape;
+    QRSysData1: TQRSysData;
+    QRShape13: TQRShape;
+    QRShape14: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRShape7: TQRShape;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape9: TQRShape;
+    QRLabel19: TQRLabel;
+    QRLtarikh: TQRLabel;
+    QRLarshive: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRLabel10: TQRLabel;
+    QRShape24: TQRShape;
+    QRShape27: TQRShape;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRL_name_register: TQRLabel;
+    QRL_adress1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape28: TQRShape;
+    QRShape29: TQRShape;
+    QRShape30: TQRShape;
+    QRBand1: TQRBand;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText22: TQRDBText;
+    QRExpr2: TQRExpr;
+    QRShape12: TQRShape;
+    QRShape10: TQRShape;
+    QRShape11: TQRShape;
+    QRShape15: TQRShape;
+    QRShape20: TQRShape;
+    QRShape21: TQRShape;
+    QRShape22: TQRShape;
+    QRShape23: TQRShape;
+    QRShape25: TQRShape;
+    QRDBText1: TQRDBText;
+    QRShape26: TQRShape;
+    QRDBText3: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRShape5: TQRShape;
+    QRShape6: TQRShape;
+    QRBand2: TQRBand;
+    QRLabel6: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRLabel8: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRLabel9: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRShape8: TQRShape;
+    QRShape16: TQRShape;
+    QRShape17: TQRShape;
+    QRLabel20: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel12: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRL_telefhon: TQRLabel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_print_ajnas_foroshande: TFrm_print_ajnas_foroshande;
+
+implementation
+
+uses unt_datamodule1, Untdmlistha;
+
+{$R *.dfm}
+
+end.

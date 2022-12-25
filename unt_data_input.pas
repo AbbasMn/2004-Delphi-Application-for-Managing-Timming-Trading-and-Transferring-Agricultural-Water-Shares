@@ -1,0 +1,611 @@
+unit unt_data_input;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, te_controls, SUIButton, SUIEdit, ExtCtrls, DB, DBCtrls,
+  Grids, DBGrids;
+
+type
+
+  Tfrm_data_input = class(TForm)
+    Bt: TButton;
+    DBGrid2: TDBGrid;
+    Label6: TLabel;
+    L_sh_goroh: TLabel;
+    RadioGroup2: TRadioGroup;
+    G_sh_gorohe_jadid: TGroupBox;
+    l_sh_gorohe_jadid: TLabel;
+    G_sh_gorohe_feli: TGroupBox;
+    l_sh_gorohe_feli: TLabel;
+    G_sh_gorohe_gabli: TGroupBox;
+    ComboBox1: TComboBox;
+    DataSource1: TDataSource;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label3: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label1: TLabel;
+    Label9: TLabel;
+    l_tedad_sahme_abe_ashari: TLabel;
+    e_roz: TsuiEdit;
+    e_sh_parvande: TsuiEdit;
+    e_mah: TsuiEdit;
+    e_sal: TsuiEdit;
+    RadioGroup1: TRadioGroup;
+    G_kasri: TGroupBox;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    e_makhraj: TsuiEdit;
+    e_sorat: TsuiEdit;
+    e_zarib: TsuiEdit;
+    G_adadi: TGroupBox;
+    Label14: TLabel;
+    e_adadi: TsuiEdit;
+    Label5: TLabel;
+    Label15: TLabel;
+    L_name: TLabel;
+    l_family: TLabel;
+    l_pedar: TLabel;
+    l_sh_sh: TLabel;
+    CheckBox1: TCheckBox;
+    procedure FormShow(Sender: TObject);
+    function check_vorod_moshakhasate_kharida:boolean;
+    procedure e_sh_shKeyPress(Sender: TObject; var Key: Char);
+    procedure clear;
+    procedure typ_tedade_sahm;
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure e_adadiExit(Sender: TObject);
+    function check_adade_kasre_tedad_sahm:boolean;
+    procedure e_makhrajExit(Sender: TObject);
+    procedure kasri_to_ashari;
+    procedure e_adadiChange(Sender: TObject);
+    procedure e_zaribChange(Sender: TObject);
+    procedure e_soratChange(Sender: TObject);
+    procedure e_makhrajChange(Sender: TObject);
+    procedure e_zaribKeyPress(Sender: TObject; var Key: Char);
+    procedure e_soratKeyPress(Sender: TObject; var Key: Char);
+    procedure e_makhrajKeyPress(Sender: TObject; var Key: Char);
+    function check_ashar(s:string):boolean;
+    procedure BtClick(Sender: TObject);
+    procedure e_rozExit(Sender: TObject);
+    procedure e_mahExit(Sender: TObject);
+    function find_akharin_sh_gorohe_nafare_aval:string;
+    procedure typ_vorode_sh_goroh;
+    procedure RadioGroup2Click(Sender: TObject);
+    procedure show_nafrate_avale_az_gorohya_feli;
+    procedure show_nafrate_avale_az_gorohya_gabli;
+    procedure show_nafrate_avale_az_gorohe_jadid;
+    procedure ComboBox1Change(Sender: TObject);
+    function check_exist_nafare_aval:boolean;
+    procedure insert_nafare_aval;
+    procedure set_code_reshteei_baraye_nafare_avale_vared_shode;
+    procedure e_zaribExit(Sender: TObject);
+    function check_farde_vared_shode_exist_in_afrade_mojod:boolean;
+    procedure e_familyExit(Sender: TObject);
+    procedure e_rozKeyPress(Sender: TObject; var Key: Char);
+    procedure e_mahKeyPress(Sender: TObject; var Key: Char);
+    procedure e_salKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+  sh_parvande,family,name,name_pedar,tarikh,code_goroh,id,sf:string;
+
+  cod_shakhs,cod_reshte:string;
+    { Public declarations }
+  end;
+
+var
+  frm_data_input: Tfrm_data_input;
+
+implementation
+
+uses  Math, unt_main, unt_dm, unt_show_afrade_mojod;
+
+{$R *.dfm}
+
+
+function Tfrm_data_input.check_farde_vared_shode_exist_in_afrade_mojod:boolean;
+begin
+  check_farde_vared_shode_exist_in_afrade_mojod:=false;
+  dm.ADOQ_show_afrade_mojod.SQL.Text:='select * from T_afrade_mojod where name='+QuotedStr(trim(l_name.caption))+
+  ' and family='+QuotedStr(l_family.caption);
+  //' and name_pedar='+QuotedStr(l_pedar.caption)+' and sh_sh='+QuotedStr(l_sh_sh.caption);
+  dm.ADOQ_show_afrade_mojod.Open;
+  if dm.ADOQ_show_afrade_mojod.RecordCount>0 then
+    check_farde_vared_shode_exist_in_afrade_mojod:=true;
+end;
+
+procedure Tfrm_data_input.set_code_reshteei_baraye_nafare_avale_vared_shode;
+begin
+
+  dm.ADOQ_show_afrad.SQL.Text:='update t_sahamdaran set cod_reshteei='+QuotedStr(code_goroh+id)+
+  ' where name='+QuotedStr(name)+
+  'and family='+QuotedStr(family)+' and name_pedar='+QuotedStr(name_pedar)+
+  ' and sh_parvande='+QuotedStr(sh_parvande)+' and tarikh='+QuotedStr(tarikh);
+   dm.ADOQ_show_afrad.ExecSQL;
+end;
+
+procedure Tfrm_data_input.insert_nafare_aval;
+var tar,vagf:string;
+begin
+  tar:=trim(e_sal.Text+'/'+e_mah.Text+'/'+e_roz.Text);
+  if tar='//' then
+    tar:='';
+  if RadioGroup2.ItemIndex=1 then
+  begin
+    dm.ADOQ_find_sh_goroh_nafare_aval.SQL.Text:='update  T_sh_radife_koli_nafarate_aval set id_nafarate_aval=id_nafarate_aval+1';
+    dm.ADOQ_find_sh_goroh_nafare_aval.ExecSQL;
+  end;
+
+  if CheckBox1.Checked then
+    vagf:='Êﬁ›'
+  else
+    vagf:='  ';
+
+  dm.ADOQ_show_afrad.SQL.Text:='insert into t_sahamdaran(sh_parvande,name,family,tedade_sahme_ashari,tedade_sahme_ashari_avalie,'+
+  'tarikh,name_pedar,sahm_zaribe_kasr,sahm_sorate_kasr,sahm_makhraje_kasr,nafare_aval,sh_radife_koli_nafare_aval,cod_reshteei,cod_shakhs,noe_entegal)'+
+  ' values('+QuotedStr(trim(e_sh_parvande.Text))+','+QuotedStr(trim(l_name.caption))+','+QuotedStr(trim(l_family.caption))+
+  ','+l_tedad_sahme_abe_ashari.Caption+','+l_tedad_sahme_abe_ashari.Caption+','+QuotedStr(tar)+
+  ','+QuotedStr(trim(l_pedar.caption))+','+QuotedStr(trim(e_zarib.Text))+','+QuotedStr(trim(e_sorat.Text))+','
+  +QuotedStr(trim(e_makhraj.Text))+','+QuotedStr(trim('‰›—«Ê·'))+','+L_sh_goroh.Caption+','+QuotedStr(cod_reshte)+','+cod_shakhs+','+QuotedStr(vagf)+')';
+  dm.ADOQ_show_afrad.ExecSQL;
+
+  {dm.ADOQ_show_afrad.SQL.Text:='select * from t_sahamdaran  where name='+QuotedStr(name)+
+  ' and family='+QuotedStr(family)+' and name_pedar='+QuotedStr(name_pedar)+
+  ' and sh_parvande='+QuotedStr(sh_parvande)+' and tarikh='+QuotedStr(tarikh)+' and nafare_aval='+QuotedStr('‰›—«Ê·')+
+  ' order by id desc';
+  dm.ADOQ_show_afrad.Open;
+  dm.ADOQ_show_afrad.First;
+  code_goroh:=dm.ADOQ_show_afradsh_radife_koli_nafare_aval.AsString;
+  id:=dm.ADOQ_show_afradid.AsString;
+  typ_vorode_sh_goroh;}
+
+
+end;
+function Tfrm_data_input.check_exist_nafare_aval:boolean;
+var ps:pchar;
+begin
+  check_exist_nafare_aval:=true;
+  dm.ADOQ_show_afrad.SQL.Text:='select  tarikh,family,name,tedade_sahme_ashari,noe_entegal,name_pedar,tedade_sahme_ashari_avalie'+
+  ',sh_parvande,somn,entegale_somn,(tedade_sahme_ashari-somn) as max_entegal,kharid_somn,cod_reshteei,entegal_az_id,id from t_sahamdaran where cod_shakhs='+cod_shakhs+
+  ' and sh_parvande='+QuotedStr(trim(e_sh_parvande.Text));
+   dm.ADOQ_show_afrad.Open;
+   if dm.ADOQ_show_afrad.RecordCount>0 then
+   begin
+    ps:=pchar(' ‰›— «Ê· »« „‘Œ’«  << '+l_name.caption+' '+l_family.caption+
+        ' >> »« ‘„«—Â Å—Ê‰œÂ << '+ e_sh_parvande.Text+
+        ' >> ﬁ»·¬ Ê«—œ ‘œÂ «”  °Ê—Êœ «ÿ·«⁄«  ÃœÌœ—« »—«Ì Â„Ì‰ ‘Œ’ œ— Â„Ì‰ ‘„«—Â Å—Ê‰œÂ  «ÌÌœ „Ì ‰„«ÌÌœø');
+
+   if MessageBox(Handle,ps,'???',MB_YESNO or MB_RIGHT or MB_RTLREADING or MB_ICONQUESTION)=id_yes then
+        check_exist_nafare_aval:=true
+   else
+        check_exist_nafare_aval:=false;
+   end;
+end;
+procedure Tfrm_data_input.show_nafrate_avale_az_gorohya_feli;
+begin
+  dm.ADOQ_show_nafarate_avale_har_goroh.SQL.Text:='select sh_radife_koli_nafare_aval,name,family,tedade_sahme_ashari_avalie,tarikh from t_sahamdaran '+
+  ' where sh_radife_koli_nafare_aval='+l_sh_gorohe_feli.Caption;
+  dm.ADOQ_show_nafarate_avale_har_goroh.Open;
+end;
+procedure Tfrm_data_input.show_nafrate_avale_az_gorohe_jadid;
+begin
+  dm.ADOQ_show_nafarate_avale_har_goroh.SQL.Text:='select sh_radife_koli_nafare_aval,name,family,tedade_sahme_ashari_avalie,tarikh from t_sahamdaran '+
+  ' where sh_radife_koli_nafare_aval='+l_sh_gorohe_jadid.Caption;
+  dm.ADOQ_show_nafarate_avale_har_goroh.Open;
+end;
+procedure Tfrm_data_input.show_nafrate_avale_az_gorohya_gabli;
+begin
+  dm.ADOQ_show_nafarate_avale_har_goroh.SQL.Text:='select sh_radife_koli_nafare_aval,name,family,tedade_sahme_ashari_avalie,tarikh from t_sahamdaran '+
+  ' where sh_radife_koli_nafare_aval='+ComboBox1.Text;
+  dm.ADOQ_show_nafarate_avale_har_goroh.Open;
+end;
+procedure Tfrm_data_input.typ_vorode_sh_goroh;
+var i,j:integer;
+  s0:string;
+begin
+  sf:=find_akharin_sh_gorohe_nafare_aval;
+  if RadioGroup2.ItemIndex=0 then
+  begin
+    if sf='0' then
+      s0:='1'
+    else
+      s0:=sf;
+    l_sh_gorohe_feli.Caption:=s0;
+    L_sh_goroh.Caption:=l_sh_gorohe_feli.Caption;
+    G_sh_gorohe_feli.Visible:=true;
+    G_sh_gorohe_jadid.Visible:=false;
+    G_sh_gorohe_gabli.Visible:=false;
+    show_nafrate_avale_az_gorohya_feli;
+    ComboBox1.Items.Clear;    
+  end;
+  if RadioGroup2.ItemIndex=1 then
+  begin
+    s0:=sf;
+    if s0='0' then
+      l_sh_gorohe_jadid.Caption:='1'
+    else
+      l_sh_gorohe_jadid.Caption:=intToStr(StrToint(s0)+1);
+      
+    L_sh_goroh.Caption:=l_sh_gorohe_jadid.Caption;
+    G_sh_gorohe_feli.Visible:=false;
+    G_sh_gorohe_jadid.Visible:=true;
+    G_sh_gorohe_gabli.Visible:=false;
+    ComboBox1.Items.Clear;
+    show_nafrate_avale_az_gorohe_jadid;
+  end;
+  if RadioGroup2.ItemIndex=2 then
+  begin
+    s0:=sf;
+    if s0<>'0' then
+    begin
+      if s0='1' then
+        ComboBox1.Items.Add(IntToStr(0))
+      else
+      begin
+        j:=StrToInt(s0)-1;
+        for i:=1 to j do
+          ComboBox1.Items.Add(IntToStr(i));
+      end;
+      ComboBox1.ItemIndex:=0;
+      G_sh_gorohe_feli.Visible:=false;
+      G_sh_gorohe_jadid.Visible:=false;
+      G_sh_gorohe_gabli.Visible:=true;
+      L_sh_goroh.Caption:=ComboBox1.Text;
+      show_nafrate_avale_az_gorohya_gabli;
+    end
+    else
+    begin
+      RadioGroup2.ItemIndex:=1;
+      typ_vorode_sh_goroh;
+      MessageBox(Handle,pchar('Â‰Ê“ ê—ÊÂÌ Ê«—œ ‰‘œÂ «” '),'!Œÿ«',MB_OK or MB_RIGHT or MB_ICONEXCLAMATION);      
+    end;
+  end;
+end;
+function Tfrm_data_input.find_akharin_sh_gorohe_nafare_aval:string;
+begin
+  dm.ADOQ_find_sh_goroh_nafare_aval.SQL.Text:='select * from  T_sh_radife_koli_nafarate_aval';
+  dm.ADOQ_find_sh_goroh_nafare_aval.Open;
+
+  find_akharin_sh_gorohe_nafare_aval:=dm.ADOQ_find_sh_goroh_nafare_avalid_nafarate_aval.AsString;
+end;
+
+function Tfrm_data_input.check_ashar(s:string):boolean;
+var i,count:integer;
+begin
+  count:=0;
+  for i:=1 to StrLen(pchar(s)) do
+  begin
+   if s[i]='.' then
+    count:=count+1;
+  end;
+  if count>1 then
+  begin
+    check_ashar:=false ;
+    MessageBox(Handle,pchar('⁄·«„  «⁄‘«— »«Ìœ »ò »«— Ê«—œ ‘Êœ'),'!Œÿ«',MB_OK or MB_RIGHT or MB_ICONEXCLAMATION);
+  end
+  else
+    check_ashar:=true;
+end;
+procedure Tfrm_data_input.kasri_to_ashari;
+var zarib,soret,makhraj:real;
+begin
+ if (e_zarib.Text='')or(e_zarib.Text='0') then
+  zarib:=0
+ else
+  zarib:=StrToFloat(e_zarib.Text);
+
+ if (e_sorat.Text='')or(e_sorat.Text='0') then
+  soret:=0
+ else
+  soret:=StrToFloat(e_sorat.Text);
+
+ if (e_makhraj.Text='')or(e_makhraj.Text='0') then
+ begin
+  l_tedad_sahme_abe_ashari.Caption:=FloatToStr(zarib);
+ end
+ else
+ begin
+  makhraj:=StrToFloat(e_makhraj.Text);
+  l_tedad_sahme_abe_ashari.Caption:=FloatToStr(zarib+(soret/makhraj));
+ end;
+
+end;
+function Tfrm_data_input.check_adade_kasre_tedad_sahm;
+begin
+  check_adade_kasre_tedad_sahm:=true;
+  if (trim(e_zarib.Text)='' )or(trim(e_sorat.Text)='')or(trim(e_makhraj.Text)='') then
+  begin
+    check_adade_kasre_tedad_sahm:=false;
+    MessageBox(Handle,pchar('÷—Ì»° ’Ê—  Ê „Œ—Ã ò”— »«Ìœ Ê«—œ ‘Ê‰œ'),'!Œÿ«',MB_OK or MB_RIGHT or MB_ICONEXCLAMATION);
+  end;
+end;
+procedure Tfrm_data_input.typ_tedade_sahm;
+begin
+  if RadioGroup1.ItemIndex=0 then
+  begin
+    e_sorat.Clear;
+    e_makhraj.Clear;
+    e_zarib.Clear;
+    G_kasri.Visible:=true;
+    G_adadi.Visible:=false;
+    l_tedad_sahme_abe_ashari.Caption:='';
+  end
+  else
+  begin
+    e_adadi.Clear;
+    e_sorat.Clear;
+    e_makhraj.Clear;
+    e_zarib.Clear;    
+    G_kasri.Visible:=false;
+    G_adadi.Visible:=true;
+    l_tedad_sahme_abe_ashari.Caption:='';    
+  end;
+end;
+
+
+procedure Tfrm_data_input.clear;
+begin
+  e_sh_parvande.Clear;
+  e_roz.Clear;
+  e_mah.Clear;
+  e_sal.Clear;
+  l_tedad_sahme_abe_ashari.Caption:='';
+  e_sorat.Clear;
+  e_zarib.Clear;
+  e_makhraj.Clear;
+  e_adadi.Clear;
+end;
+/////////////////////////
+
+
+
+
+
+function Tfrm_data_input.check_vorod_moshakhasate_kharida:boolean;
+var s:string;
+begin
+  check_vorod_moshakhasate_kharida:=true;
+  s:='';
+  if e_sh_parvande.Text='' then
+  begin
+    s:=s+' ‘„«—Â Å—Ê‰œÂ ';
+    e_sh_parvande.SetFocus;
+  end;
+  
+
+
+ { if e_sal.Text='' then
+  begin
+    s:=s+' ”«· ';
+    e_sal.SetFocus;
+  end;
+    if e_mah.Text='' then
+  begin
+    s:=s+' „«Â ';
+    e_mah.SetFocus;
+  end;  
+
+   if e_roz.Text='' then
+  begin
+    s:=s+' —Ê“ ';
+    e_roz.SetFocus;
+  end; }
+
+  if trim(l_tedad_sahme_abe_ashari.Caption)='' then
+  begin
+    s:=s+'  ⁄œ«œ ”Â„ ¬» ';
+    if RadioGroup1.ItemIndex=0 then
+      e_zarib.SetFocus
+    else
+      e_adadi.SetFocus;
+  end;
+  {if l_pedar.caption='' then
+  begin
+    s:=s+' ‰«„ Åœ— ';
+    e_pedar.SetFocus;
+  end; }
+  {if l_sh_sh.caption='' then
+  begin
+    s:=s+' ‘„«—Â ‘‰«”‰«„Â ';
+  end; }
+
+  if l_family.caption='' then
+  begin
+    s:=s+' ‰«„ Œ«‰Ê«œêÌ Ì« ‰«„ „Ê””Â';
+  end;
+  {if l_name.caption='' then
+  begin
+    s:=s+' ‰«„ ';
+  end;}
+  if s<>'' then
+  begin
+    check_vorod_moshakhasate_kharida:=false;
+    MessageBox(Handle,pchar(s+' »«Ìœ Ê«—œ ‘Êœ'),'!Œÿ«',MB_OK or MB_RIGHT or MB_ICONEXCLAMATION);
+  end;
+
+end;
+
+procedure Tfrm_data_input.FormShow(Sender: TObject);
+begin
+    CheckBox1.Checked:=false;
+    RadioGroup1.ItemIndex:=0;
+    typ_tedade_sahm;
+    RadioGroup2.ItemIndex:=1;
+    typ_vorode_sh_goroh;
+    clear;
+end;
+
+
+procedure Tfrm_data_input.e_sh_shKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9','.',#8]) then
+   key:=#0;
+end;
+
+procedure Tfrm_data_input.RadioGroup1Click(Sender: TObject);
+begin
+  typ_tedade_sahm;
+end;
+
+procedure Tfrm_data_input.e_adadiExit(Sender: TObject);
+begin
+  if check_ashar(e_adadi.Text) then
+    l_tedad_sahme_abe_ashari.Caption:=e_adadi.Text
+  else
+    begin
+      e_adadi.Text:='';
+      l_tedad_sahme_abe_ashari.Caption:='';
+    end;
+end;
+
+procedure Tfrm_data_input.e_makhrajExit(Sender: TObject);
+begin
+ if  check_adade_kasre_tedad_sahm then
+    kasri_to_ashari
+ else
+  e_zarib.SetFocus;
+end;
+
+procedure Tfrm_data_input.e_adadiChange(Sender: TObject);
+begin
+  if check_ashar(e_adadi.Text) then
+    l_tedad_sahme_abe_ashari.Caption:=e_adadi.Text
+  else
+    begin
+      e_adadi.Text:='';
+      l_tedad_sahme_abe_ashari.Caption:='';
+    end;
+
+
+end;
+
+procedure Tfrm_data_input.e_zaribChange(Sender: TObject);
+begin
+  if check_ashar(e_zarib.Text) then
+  begin
+      kasri_to_ashari;
+  end
+  else
+    begin
+      e_zarib.Text:='';
+      l_tedad_sahme_abe_ashari.Caption:='';
+    end;
+end;
+
+procedure Tfrm_data_input.e_soratChange(Sender: TObject);
+begin
+  kasri_to_ashari;
+end;
+
+procedure Tfrm_data_input.e_makhrajChange(Sender: TObject);
+begin
+  kasri_to_ashari;
+end;
+
+procedure Tfrm_data_input.e_zaribKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9','.',#8]) then
+   key:=#0;
+end;
+
+procedure Tfrm_data_input.e_soratKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9',#8]) then
+   key:=#0;
+end;
+
+procedure Tfrm_data_input.e_makhrajKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if not (key in['0'..'9',#8]) then
+   key:=#0;
+end;
+
+procedure Tfrm_data_input.BtClick(Sender: TObject);
+begin
+  name:=trim(l_name.caption);
+  family:=trim(l_family.caption);
+  name_pedar:=trim(l_pedar.caption);
+  sh_parvande:=trim(e_sh_parvande.Text);
+  tarikh:=trim(e_sal.Text+'/'+e_mah.Text+'/'+e_roz.Text);
+  if check_vorod_moshakhasate_kharida then
+  begin
+          typ_vorode_sh_goroh;
+          if check_exist_nafare_aval then
+          begin
+           insert_nafare_aval;
+           clear;
+           MessageBox(Handle,pchar('«ÿ·«⁄«  ‰›— «Ê· «‰ Œ«»Ì –ŒÌ—Â ‘œ'),'!!!!',MB_OK or MB_RIGHT or MB_RTLREADING or MB_ICONINFORMATION);
+           close;
+          end;
+  end;
+end;
+
+procedure Tfrm_data_input.e_rozExit(Sender: TObject);
+begin
+ if strlen(pchar(e_roz.Text))=1 then
+  e_roz.Text:='0'+e_roz.Text;
+end;
+
+procedure Tfrm_data_input.e_mahExit(Sender: TObject);
+begin
+ if strlen(pchar(e_mah.Text))=1 then
+  e_mah.Text:='0'+e_mah.Text;
+end;
+
+procedure Tfrm_data_input.RadioGroup2Click(Sender: TObject);
+begin
+ typ_vorode_sh_goroh;
+end;
+
+procedure Tfrm_data_input.ComboBox1Change(Sender: TObject);
+begin
+  L_sh_goroh.Caption:=ComboBox1.Text;
+  show_nafrate_avale_az_gorohya_gabli;
+end;
+
+procedure Tfrm_data_input.e_zaribExit(Sender: TObject);
+begin
+  if check_ashar(e_zarib.Text) then
+  begin
+      kasri_to_ashari;
+  end
+  else
+    begin
+      e_zarib.Text:='';
+      l_tedad_sahme_abe_ashari.Caption:='';
+    end;
+end;
+
+procedure Tfrm_data_input.e_familyExit(Sender: TObject);
+begin
+if check_farde_vared_shode_exist_in_afrade_mojod then
+  frm_show_afrade_ba_yek_nam.ShowModal;
+end;
+
+procedure Tfrm_data_input.e_rozKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9',#8]) then
+   key:=#0;
+end;
+
+procedure Tfrm_data_input.e_mahKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9',#8]) then
+   key:=#0;
+end;
+
+procedure Tfrm_data_input.e_salKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9',#8]) then
+   key:=#0;
+end;
+
+end.

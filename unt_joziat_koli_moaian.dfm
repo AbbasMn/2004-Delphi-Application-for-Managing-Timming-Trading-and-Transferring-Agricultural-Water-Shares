@@ -1,0 +1,169 @@
+object frm_joziat_koli_moaian: Tfrm_joziat_koli_moaian
+  Left = 1
+  Top = 74
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 622
+  ClientWidth = 1011
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnShow = FormShow
+  DesignSize = (
+    1011
+    622)
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid2: TDBGrid
+    Left = 1
+    Top = 5
+    Width = 1007
+    Height = 615
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    BiDiMode = bdRightToLeft
+    DataSource = DataSource1
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    ParentBiDiMode = False
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'family'
+        Title.Alignment = taCenter
+        Title.Caption = #1606#1575#1605' '#1582#1575#1606#1608#1575#1583#1711#1610' '#1711#1610#1585#1606#1583#1607
+        Width = 95
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'name'
+        Title.Alignment = taCenter
+        Title.Caption = #1606#1575#1605' '#1711#1610#1585#1606#1583#1607
+        Width = 53
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'cod_shakhs'
+        Title.Alignment = taCenter
+        Title.Caption = #1705#1583' '#1711#1610#1585#1606#1583#1607
+        Width = 57
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'az_family'
+        Title.Alignment = taCenter
+        Title.Caption = #1606#1575#1605' '#1582#1575#1606#1608#1575#1583#1711#1610' '#1583#1607#1606#1583#1607
+        Width = 25
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'az_name'
+        Title.Alignment = taCenter
+        Title.Caption = #1606#1575#1605' '#1583#1607#1606#1583#1607
+        Width = 53
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'id_entegal_dahande'
+        Title.Alignment = taCenter
+        Title.Caption = #1705#1583' '#1583#1607#1606#1583#1607
+        Width = 46
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'koli'
+        Title.Alignment = taCenter
+        Title.Caption = #1705#1604#1610' '#1605#1593#1610#1606' / '#1606#1575#1605#1593#1610#1606
+        Width = 68
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'id_koli_moaian_be'
+        Title.Alignment = taCenter
+        Title.Caption = #1588#1605#1575#1585#1607' '#1575#1606#1578#1602#1575#1604' '#1705#1604#1610' '#1605#1593#1610#1606
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'id_koli_na_moaian_be'
+        Title.Caption = #1588#1605#1575#1585#1607' '#1575#1606#1578#1602#1575#1604' '#1705#1604#1610' '#1606#1575#1605#1593#1610#1606
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'noe_entegal'
+        Title.Alignment = taCenter
+        Title.Caption = #1606#1608#1593' '#1575#1606#1578#1602#1575#1604
+        Width = 50
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'tedade_sahme_ashari_avalie'
+        Title.Caption = #1578#1593#1583#1575#1583' '#1587#1607#1605' '#1575#1606#1578#1602#1575#1604#1610
+        Width = 90
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'sh_parvande'
+        Title.Alignment = taCenter
+        Title.Caption = #1588#1605#1575#1585#1607' '#1662#1585#1608#1606#1583#1607
+        Width = 67
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'sh_sanade_mahzari'
+        Title.Alignment = taCenter
+        Title.Caption = #1588#1605#1575#1585#1607' '#1587#1606#1583
+        Width = 66
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'tarikh'
+        Title.Alignment = taCenter
+        Title.Caption = #1578#1575#1585#1610#1582
+        Width = 47
+        Visible = True
+      end>
+  end
+  object DataSource1: TDataSource
+    DataSet = Dm.ADOQ_show_afrad
+    Left = 336
+    Top = 232
+  end
+end

@@ -1,0 +1,104 @@
+unit unt_Dm_koli;
+
+interface
+
+uses
+  SysUtils, Classes, DB, ADODB;
+
+type
+  TDm_koli = class(TDataModule)
+    ADOQ_dahande_dar_koli: TADOQuery;
+    ADOQ_temp_avale_koli: TADOQuery;
+    ADOQ_temp_avale_kolicod_shakhs: TIntegerField;
+    ADOQ_temp_avale_kolifamily: TWideStringField;
+    ADOQ_temp_avale_koliname: TWideStringField;
+    ADOQ_temp_avale_kolish_parvande: TWideStringField;
+    ADOQ_temp_avale_kolitedade_sahme_ashari: TFloatField;
+    ADOQ_temp_avale_koliid: TAutoIncField;
+    ADOQ_temp_avale_kolicod_reshteei: TMemoField;
+    ADOQ_temp_avale_koliname_pedar: TWideStringField;
+    ADOQ_temp_avale_koliid_dar_sahamdaran: TIntegerField;
+    ADOQ_temp_avale_kolinoe_entegal: TWideStringField;
+    ADOQ_jame_kole_sahme_ab_barye_namoian: TADOQuery;
+    ADOQ_jame_kole_sahme_ab_barye_namoiankol_: TFloatField;
+    ADOQ_jame_kole_sahme_ab_barye_namoianfamily: TWideStringField;
+    ADOQ_jame_kole_sahme_ab_barye_namoianname: TWideStringField;
+    ADOQ_jame_kole_sahme_ab_barye_namoianname_pedar: TWideStringField;
+    ADOQ_temp_avale_koli_namoian: TADOQuery;
+    ADOQ_temp_avale_koli_namoiancod_shakhs: TIntegerField;
+    ADOQ_temp_avale_koli_namoianfamily: TWideStringField;
+    ADOQ_temp_avale_koli_namoianname: TWideStringField;
+    ADOQ_temp_avale_koli_namoiansh_parvande: TWideStringField;
+    ADOQ_temp_avale_koli_namoiantedade_sahme_ashari: TFloatField;
+    ADOQ_temp_avale_koli_namoianid: TAutoIncField;
+    ADOQ_temp_avale_koli_namoiancod_reshteei: TMemoField;
+    ADOQ_temp_avale_koli_namoianname_pedar: TWideStringField;
+    ADOQ_temp_avale_koli_namoianid_dar_sahamdaran: TIntegerField;
+    ADOQ_temp_avale_koli_namoiannoe_entegal: TWideStringField;
+    ADOQ_automatic_select_for_na_moaian: TADOQuery;
+    ADOQ_automatic_select_for_na_moaiancod_shakhs: TIntegerField;
+    ADOQ_automatic_select_for_na_moaianfamily: TWideStringField;
+    ADOQ_automatic_select_for_na_moaianname: TWideStringField;
+    ADOQ_automatic_select_for_na_moaiansh_parvande: TWideStringField;
+    ADOQ_automatic_select_for_na_moaiantedade_sahme_ashari: TFloatField;
+    ADOQ_automatic_select_for_na_moaiancod_reshteei: TMemoField;
+    ADOQ_automatic_select_for_na_moaianname_pedar: TWideStringField;
+    ADOQ_automatic_select_for_na_moaianid: TAutoIncField;
+    ADOQ_jame_kole_sahme_ab_barye_namoiancod_shakhs: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_moaian_az: TADOQuery;
+    ADOQ_sh_entegalhaye_koli_moaian_azid_koli_moaian_be: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_moaian_azaz_family: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_moaian_azaz_name: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_moaian_azkoli: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_moaian_azid_entegal_dahande: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_moaian_be: TADOQuery;
+    ADOQ_sh_entegalhaye_koli_na_moaian_be: TADOQuery;
+    ADOQ_sh_entegalhaye_koli_moaian_becod_shakhs: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_moaian_beid_koli_moaian_be: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_moaian_befamily: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_moaian_bename: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_moaian_bekoli: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_az: TADOQuery;
+    ADOQ_sh_entegalhaye_koli_na_moaian_becod_shakhs: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_beid_koli_na_moaian_be: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_befamily: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_bename: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_bekoli: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_azid_entegal_dahande: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_azid_koli_na_moaian_be: TIntegerField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_azaz_family: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_azaz_name: TWideStringField;
+    ADOQ_sh_entegalhaye_koli_na_moaian_azkoli: TWideStringField;
+    ADOQ_temp_avale_kolisahm_zaribe_kasr: TWideStringField;
+    ADOQ_temp_avale_kolisahm_sorate_kasr: TWideStringField;
+    ADOQ_temp_avale_kolisahm_makhraje_kasr: TWideStringField;
+    ADOQ_dahande_dar_kolifamily: TWideStringField;
+    ADOQ_dahande_dar_koliname: TWideStringField;
+    ADOQ_dahande_dar_kolitedade_sahme_ashari: TFloatField;
+    ADOQ_dahande_dar_kolicod_reshteei: TMemoField;
+    ADOQ_dahande_dar_koliname_pedar: TWideStringField;
+    ADOQ_dahande_dar_kolinafare_aval: TWideStringField;
+    ADOQ_dahande_dar_kolitedade_sahme_ashari_avalie: TFloatField;
+    ADOQ_dahande_dar_kolicod_shakhs: TIntegerField;
+    ADOQ_dahande_dar_koliid: TAutoIncField;
+    ADOQ_dahande_dar_kolish_parvande: TWideStringField;
+    ADOQ_dahande_dar_kolinoe_entegal: TWideStringField;
+    ADOQ_dahande_dar_kolish_sanade_mahzari: TWideStringField;
+    ADOQ_dahande_dar_kolisomn: TFloatField;
+    ADOQ_dahande_dar_kolimax_entegal: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Dm_koli: TDm_koli;
+
+implementation
+
+uses unt_dm;
+
+{$R *.dfm}
+
+end.

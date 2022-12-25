@@ -1,0 +1,226 @@
+unit unt_sabte_somne_zan;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, SUIEdit, DB, Grids, DBGrids;
+
+type
+  Tfrm_sabte_somne_zan = class(TForm)
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label3: TLabel;
+    Label8: TLabel;
+    l_tedad_sahme_abe_ashari: TLabel;
+    Label20: TLabel;
+    L_name: TLabel;
+    l_family: TLabel;
+    l_pedar: TLabel;
+    l_sh_sh: TLabel;
+    Label22: TLabel;
+    e_sh_parvande: TsuiEdit;
+    RadioGroup2: TRadioGroup;
+    G_geire_mahzari: TGroupBox;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    e_roz: TsuiEdit;
+    e_mah: TsuiEdit;
+    e_sal: TsuiEdit;
+    G_mahzari: TGroupBox;
+    Label7: TLabel;
+    Label9: TLabel;
+    Label1: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label21: TLabel;
+    e_roz_mahzar: TsuiEdit;
+    e_mah_mahzar: TsuiEdit;
+    e_sal_mahzar: TsuiEdit;
+    e_sh_mahzar: TsuiEdit;
+    e_sh_sanade_sabti: TsuiEdit;
+    e_shahre_mahzar: TsuiEdit;
+    Bt: TButton;
+    L_somn: TLabel;
+    DBGrid2: TDBGrid;
+    DataSource1: TDataSource;
+    Label10: TLabel;
+    e_search: TsuiEdit;
+    Label5: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure BtClick(Sender: TObject);
+    function check_vorod_moshakhasate_kharida:boolean;
+
+    procedure clear;
+
+    procedure insert_entegal;
+    procedure e_searchChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    cod_reshte,cod_shakhs,g_tarikh:string;
+    family,name,name_pedar,sh_sh,id,id_update:string;
+    tedade_sahm,sh_parvande:string;
+  end;
+
+var
+  frm_sabte_somne_zan: Tfrm_sabte_somne_zan;
+
+implementation
+
+uses unt_dm;
+
+{$R *.dfm}
+
+procedure Tfrm_sabte_somne_zan.clear;
+begin
+  e_sh_parvande.Clear;
+  e_roz.Clear;
+  e_mah.Clear;
+  e_sal.Clear;
+
+  e_roz_mahzar.Clear;
+  e_mah_mahzar.Clear;
+  e_sal_mahzar.Clear;
+  e_sh_mahzar.Text:='';
+  e_sh_sanade_sabti.Clear;
+  e_shahre_mahzar.Text:='ÇÓÊåÈÇä';
+end;
+procedure Tfrm_sabte_somne_zan.insert_entegal;
+var tarikh,tozihe_somn:string;
+    somn:real;
+begin
+if RadioGroup2.ItemIndex=0 then
+  tarikh:=trim(e_sal_mahzar.Text+'/'+e_mah_mahzar.Text+'/'+e_roz_mahzar.Text)
+else
+  tarikh:=trim(e_sal.Text+'/'+e_mah.Text+'/'+e_roz.Text);
+
+  if tarikh='//' then
+    tarikh:='';
+
+  somn:=StrToFloat(l_tedad_sahme_abe_ashari.Caption);
+  tozihe_somn:='Ëãä ËÈÊ ÔÏå ÈÑÇí Òä';
+
+  dm.ADOQ_show_afrad.SQL.Text:='insert into t_sahamdaran(entegal_az_id,sh_parvande,name,family,tedade_sahme_ashari,tedade_sahme_ashari_avalie,'+
+  'tarikh,name_pedar,sahm_zaribe_kasr,sahm_sorate_kasr,sahm_makhraje_kasr,id_entegal_dahande,sh_sanade_mahzari,sh_mahzar,shahre_mahzar,'+
+  'az_name,az_family,az_name_pedar,noe_entegal,cod_shakhs,cod_reshteei,tozihe_somn)'+
+  ' values('+id_update+
+  ','+QuotedStr(trim(e_sh_parvande.Text))+','+QuotedStr(trim(l_name.caption))+','+QuotedStr(trim(l_family.caption))+
+  ','+l_tedad_sahme_abe_ashari.Caption+','+l_tedad_sahme_abe_ashari.Caption+','+QuotedStr(tarikh)+
+  ','+QuotedStr(trim(l_pedar.caption))+','+QuotedStr(trim(''))+','+QuotedStr(trim(''))+','
+  +QuotedStr(trim(''))+','+Dm.ADOQ_show_nafarat_baraye_dadane_sahmcod_shakhs.AsString+
+  ','+QuotedStr(e_sh_sanade_sabti.Text)+','+QuotedStr(e_sh_mahzar.Text)+','+QuotedStr(e_shahre_mahzar.Text)+','+
+  QuotedStr(trim(Dm.ADOQ_show_nafarat_baraye_dadane_sahmname.AsString))+','+
+  QuotedStr(trim(Dm.ADOQ_show_nafarat_baraye_dadane_sahmfamily.AsString))+','+
+  QuotedStr(trim(Dm.ADOQ_show_nafarat_baraye_dadane_sahmname_pedar.AsString))+','+QuotedStr(L_somn.Caption)+
+  ','+cod_shakhs+
+  ','+QuotedStr(Dm.ADOQ_show_nafarat_baraye_dadane_sahmcod_reshteei.AsString+cod_reshte)+
+  ','+QuotedStr(tozihe_somn)+')';
+  dm.ADOQ_show_afrad.ExecSQL;
+
+  dm.ADOQ_show_afrad.SQL.Text:='update t_sahamdaran set entegale_somn='+QuotedStr('Èáí');
+
+  dm.ADOQ_show_afrad.SQL.Text:=dm.ADOQ_show_afrad.SQL.Text+'  where id='+id_update;
+  dm.ADOQ_show_afrad.ExecSQL;
+
+
+  MessageBox(Handle,pchar('Ëãä ÇÚíÇäí ÈÑÇí Òä/ÎÇäã ÇäÊÎÇÈí ËÈÊ ÑÏíÏ'),'!!!!',MB_OK or MB_RIGHT or MB_RTLREADING or MB_ICONINFORMATION);
+
+  Dm.ADOQ_show_nafarat_baraye_dadane_sahm.SQL.Text:='select tarikh,sahm_zaribe_kasr,sahm_sorate_kasr,sahm_makhraje_kasr,family,name,tedade_sahme_ashari,'+
+  'cod_reshteei,name_pedar,nafare_aval,tedade_sahme_ashari_avalie,cod_shakhs,id,sh_parvande,noe_entegal,entegal_az_id,somn,entegale_somn,(tedade_sahme_ashari-somn) as max_entegal,kharid_somn from t_sahamdaran'+
+  ' where somn>0  order by family,name,name_pedar';
+  Dm.ADOQ_show_nafarat_baraye_dadane_sahm.Open;  
+
+end;
+////////////////////////////////////////
+
+function Tfrm_sabte_somne_zan.check_vorod_moshakhasate_kharida:boolean;
+var s:string;
+begin
+  check_vorod_moshakhasate_kharida:=true;
+  s:='';
+
+  if e_sh_parvande.Text='' then
+  begin
+    s:=s+' ÔãÇÑå ÑæäÏå ';
+    e_sh_parvande.SetFocus;
+  end;
+
+
+    if (trim(l_tedad_sahme_abe_ashari.Caption)='')or(trim(l_tedad_sahme_abe_ashari.Caption)='0') then
+    begin
+     s:=s+'(ÊÚÏÇÏ Óåã Ëãä ÇÚíÇäí ÕİÑ ãí ÈÇÔÏ ÏÑ äÊíÌå äãí ÊæÇä Âä ÑÇ ãäÊŞá äãæÏ)';
+     check_vorod_moshakhasate_kharida:=false;
+     MessageBox(Handle,pchar(s),'!ÎØÇ',MB_OK or MB_RIGHT or MB_ICONEXCLAMATION);
+    end;
+
+
+  if l_family.caption='' then
+  begin
+    s:=s+' äÇã ÎÇäæÇÏí íÇ äÇã ãæÓÓå ';
+  end;
+
+  if (s<>'')then
+  begin
+    check_vorod_moshakhasate_kharida:=false;
+    MessageBox(Handle,pchar(s+' ÈÇíÏ æÇÑÏ ÔæÏ'),'!ÎØÇ',MB_OK or MB_RIGHT or MB_ICONEXCLAMATION);
+  end;
+
+end;
+///////////////////////
+
+procedure Tfrm_sabte_somne_zan.FormShow(Sender: TObject);
+begin
+  Dm.ADOQ_show_nafarat_baraye_dadane_sahm.SQL.Text:='select tarikh,sahm_zaribe_kasr,sahm_sorate_kasr,sahm_makhraje_kasr,family,name,tedade_sahme_ashari,'+
+  'cod_reshteei,name_pedar,nafare_aval,tedade_sahme_ashari_avalie,cod_shakhs,id,sh_parvande,noe_entegal,entegal_az_id,somn,entegale_somn,(tedade_sahme_ashari-somn) as max_entegal,kharid_somn from t_sahamdaran'+
+  ' where somn>0  order by family,name,name_pedar';
+  Dm.ADOQ_show_nafarat_baraye_dadane_sahm.Open;
+
+  clear;
+  
+end;
+
+procedure Tfrm_sabte_somne_zan.BtClick(Sender: TObject);
+var pch:pchar;
+begin
+  if Dm.ADOQ_show_nafarat_baraye_dadane_sahm.RecordCount >0 then
+  begin
+      if Dm.ADOQ_show_nafarat_baraye_dadane_sahmentegale_somn.AsString='Èáí' then
+      begin
+          pch:=pchar('Ëãä ÇÚíÇäí ĞÎíÑå ÔÏå ÈÑÇí ÇäÊŞÇá ÇäÊÎÇÈí ŞÈáÇğ ÈÑÇí Òä / ÎÇäã ËÈÊ ÑÏíÏå ÇÓÊ');
+          MessageBox(Handle,pch,'!ÎØÇ',MB_OK or MB_RIGHT or MB_RTLREADING or MB_ICONEXCLAMATION);
+      end
+      else
+      begin
+        if RadioGroup2.ItemIndex=0 then
+          g_tarikh:=trim(e_sal_mahzar.Text+'/'+e_mah_mahzar.Text+'/'+e_roz_mahzar.Text)
+        else
+          g_tarikh:=trim(e_sal.Text+'/'+e_mah.Text+'/'+e_roz.Text);
+
+        tedade_sahm:=l_tedad_sahme_abe_ashari.Caption;
+        sh_parvande:=trim(e_sh_parvande.Text);
+        id:=Dm.ADOQ_show_nafarat_baraye_dadane_sahmcod_shakhs.AsString;
+        id_update:=Dm.ADOQ_show_nafarat_baraye_dadane_sahmid.AsString;
+
+        if check_vorod_moshakhasate_kharida then
+        begin
+          if  MessageBox(Handle,'ÇÌÑÇí ÚãáíÇÊ ÑÇ ÊÇííÏ ãí äãÇííÏ¿','???????',MB_YESNO or MB_RIGHT or MB_RTLREADING or MB_ICONQUESTION)=id_yes then
+          begin
+            insert_entegal;
+            clear;
+          end;
+        end;
+
+      end;
+  end;
+end;
+
+procedure Tfrm_sabte_somne_zan.e_searchChange(Sender: TObject);
+begin
+ Dm.ADOQ_show_nafarat_baraye_dadane_sahm.Locate('family',e_search.Text,[loPartialKey]);
+end;
+
+end.

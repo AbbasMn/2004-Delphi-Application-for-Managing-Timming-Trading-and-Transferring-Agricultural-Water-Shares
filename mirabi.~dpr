@@ -1,0 +1,75 @@
+program mirabi;
+
+uses
+  Forms,
+  unt_main in 'unt_main.pas' {frm_main},
+  Taghvim in 'Taghvim.pas' {_taghvim},
+  unt_login in 'unt_login.pas' {Frm_login},
+  Unt_login_change in 'Unt_login_change.pas' {Frm_login_change},
+  unt_dabare in 'unt_dabare.pas' {frm_dabare},
+  unt_data_input in 'unt_data_input.pas' {frm_data_input},
+  unt_dm in 'unt_dm.pas' {Dm: TDataModule},
+  unt_vorode_dovom_be_bad in 'unt_vorode_dovom_be_bad.pas' {frm_vorode_dovom_be_bad},
+  unt_show_exist_entegal in 'unt_show_exist_entegal.pas' {frm_show_exist_entegal},
+  unt_show_afrad_mabnaye_gozaresh in 'unt_show_afrad_mabnaye_gozaresh.pas' {frm_show_afrad_mabnaye_gozaresh},
+  unt_show_afrade_mojod in 'unt_show_afrade_mojod.pas' {frm_show_afrade_ba_yek_nam},
+  unt_vorode_moshakhasat in 'unt_vorode_moshakhasat.pas' {frm_vorode_moshakhasat},
+  unt_trace_entegal in 'unt_trace_entegal.pas' {frm_trace_entegal},
+  unt_mianie_gozaresh in 'unt_mianie_gozaresh.pas' {frm_mianie_gozaresh},
+  unt_print_temp_gozaresh in 'unt_print_temp_gozaresh.pas' {frm_print_temp_gozaresh},
+  unt_shakhse_jadid in 'unt_shakhse_jadid.pas' {frm_shakhse_jadid},
+  unt_jame_sahme_abe_nafarate_aval in 'unt_jame_sahme_abe_nafarate_aval.pas' {frm_jame_sahme_abe_nafarate_aval},
+  unt_entegale_koli_moaian in 'unt_entegale_koli_moaian.pas' {frm_entegale_koli_moaian},
+  unt_entegale_koli_na_moaian in 'unt_entegale_koli_na_moaian.pas' {frm_entegale_koli_na_moaian},
+  unt_entekhabe_aval_dar_koli in 'unt_entekhabe_aval_dar_koli.pas' {frm_entekhabe_aval_dar_koli},
+  unt_Dm_koli in 'unt_Dm_koli.pas' {Dm_koli: TDataModule},
+  unt_show_jame_sahme_har_shakhs_beraye_entekhabe_namoaian in 'unt_show_jame_sahme_har_shakhs_beraye_entekhabe_namoaian.pas' {frm_show_jame_sahme_har_shakhs_beraye_entekhabe_namoaian},
+  unt_gozaresh_az_entegale_moayan in 'unt_gozaresh_az_entegale_moayan.pas' {frm_gozaresh_az_entegale_moayan},
+  unt_joziat_koli_moaian in 'unt_joziat_koli_moaian.pas' {frm_joziat_koli_moaian},
+  unt_gozaresh_az_entegale_na_moayan in 'unt_gozaresh_az_entegale_na_moayan.pas' {frm_gozaresh_az_entegale_na_moayan},
+  unt_eslahe_shakhs in 'unt_eslahe_shakhs.pas' {frm_eslahe_shakhs},
+  unt_eslahe_sahme_nafare_aval in 'unt_eslahe_sahme_nafare_aval.pas' {frm_eslahe_sahme_nafare_aval},
+  unt_eslahe_sahme_abe_geire_aval in 'unt_eslahe_sahme_abe_geire_aval.pas' {frm_eslahe_sahme_abe_geire_aval},
+  unt_Dm_eslah in 'unt_Dm_eslah.pas' {Dm_eslah: TDataModule},
+  unt_show_exist_entegal2 in 'unt_show_exist_entegal2.pas' {frm_show_exist_entegal2},
+  unt_hazfe_sahme_abe_nafare_aval in 'unt_hazfe_sahme_abe_nafare_aval.pas' {frm_hazfe_sahme_abe_nafare_aval},
+  unt_hazfe_sahme_abe_nafare_geire_aval in 'unt_hazfe_sahme_abe_nafare_geire_aval.pas' {frm_hazfe_sahme_abe_nafare_geire_aval};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(Tfrm_main, frm_main);
+  Application.CreateForm(T_taghvim, _taghvim);
+  Application.CreateForm(TFrm_login, Frm_login);
+  Application.CreateForm(TFrm_login_change, Frm_login_change);
+  Application.CreateForm(Tfrm_dabare, frm_dabare);
+  Application.CreateForm(Tfrm_data_input, frm_data_input);
+  Application.CreateForm(TDm, Dm);
+  Application.CreateForm(Tfrm_vorode_dovom_be_bad, frm_vorode_dovom_be_bad);
+  Application.CreateForm(Tfrm_show_exist_entegal, frm_show_exist_entegal);
+  Application.CreateForm(Tfrm_show_afrad_mabnaye_gozaresh, frm_show_afrad_mabnaye_gozaresh);
+  Application.CreateForm(Tfrm_show_afrade_ba_yek_nam, frm_show_afrade_ba_yek_nam);
+  Application.CreateForm(Tfrm_vorode_moshakhasat, frm_vorode_moshakhasat);
+  Application.CreateForm(Tfrm_trace_entegal, frm_trace_entegal);
+  Application.CreateForm(Tfrm_mianie_gozaresh, frm_mianie_gozaresh);
+  Application.CreateForm(Tfrm_print_temp_gozaresh, frm_print_temp_gozaresh);
+  Application.CreateForm(Tfrm_shakhse_jadid, frm_shakhse_jadid);
+  Application.CreateForm(Tfrm_jame_sahme_abe_nafarate_aval, frm_jame_sahme_abe_nafarate_aval);
+  Application.CreateForm(Tfrm_entegale_koli_moaian, frm_entegale_koli_moaian);
+  Application.CreateForm(Tfrm_entegale_koli_na_moaian, frm_entegale_koli_na_moaian);
+  Application.CreateForm(Tfrm_entekhabe_aval_dar_koli, frm_entekhabe_aval_dar_koli);
+  Application.CreateForm(TDm_koli, Dm_koli);
+  Application.CreateForm(Tfrm_show_jame_sahme_har_shakhs_beraye_entekhabe_namoaian, frm_show_jame_sahme_har_shakhs_beraye_entekhabe_namoaian);
+  Application.CreateForm(Tfrm_gozaresh_az_entegale_moayan, frm_gozaresh_az_entegale_moayan);
+  Application.CreateForm(Tfrm_joziat_koli_moaian, frm_joziat_koli_moaian);
+  Application.CreateForm(Tfrm_gozaresh_az_entegale_na_moayan, frm_gozaresh_az_entegale_na_moayan);
+  Application.CreateForm(Tfrm_eslahe_shakhs, frm_eslahe_shakhs);
+  Application.CreateForm(Tfrm_eslahe_sahme_nafare_aval, frm_eslahe_sahme_nafare_aval);
+  Application.CreateForm(Tfrm_eslahe_sahme_abe_geire_aval, frm_eslahe_sahme_abe_geire_aval);
+  Application.CreateForm(TDm_eslah, Dm_eslah);
+  Application.CreateForm(Tfrm_show_exist_entegal2, frm_show_exist_entegal2);
+  Application.CreateForm(Tfrm_hazfe_sahme_abe_nafare_aval, frm_hazfe_sahme_abe_nafare_aval);
+  Application.CreateForm(Tfrm_hazfe_sahme_abe_nafare_geire_aval, frm_hazfe_sahme_abe_nafare_geire_aval);
+  Application.Run;
+end.
